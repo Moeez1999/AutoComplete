@@ -118,8 +118,12 @@ class _AutoCompleteWidgetState extends State<AutoCompleteWidget> {
 
   List<String> searchDataFromList(String c) {
     if (c.isEmpty || c == '') {
+      searchValue = [];
       return searchValue;
     } else {
+      setState(() {
+        searchValue.clear();
+      });
       for (var e in listValue) {
         if (e.toString().toLowerCase().contains(c.toLowerCase())) {
           setState(() {
