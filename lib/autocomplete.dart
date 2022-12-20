@@ -10,12 +10,14 @@ class AutoCompleteWidget extends StatefulWidget {
     required this.controller,
     this.mapkey,
     this.secondmapKey,
+    this.thirdmapKey,
   });
 
   final List jsonList;
   final TextEditingController controller;
   final String? mapkey;
   final String? secondmapKey;
+  final String? thirdmapKey;
 
   @override
   State<AutoCompleteWidget> createState() => _AutoCompleteWidgetState();
@@ -81,6 +83,7 @@ class _AutoCompleteWidgetState extends State<AutoCompleteWidget> {
           widget.controller.text = suggestion;
         },
         onSaved: (value) => selectedValue = value,
+        hideOnError: true,
       ),
     );
   }
@@ -92,20 +95,23 @@ class _AutoCompleteWidgetState extends State<AutoCompleteWidget> {
     for (var element in widget.jsonList) {
       if (element is Map) {
         if (element[widget.mapkey] != null) {
-          if (widget.secondmapKey == null) {
-            setState(() {
-              listValue.add(element[widget.mapkey]);
-            });
-          } else {
-            if (element[widget.mapkey][widget.secondmapKey] != null) {
+          if (widget.secondmapKey != null) {
+            if (widget.thirdmapKey != null) {
               setState(() {
-                listValue.add(element[widget.mapkey][widget.secondmapKey]);
+                listValue.add(element[widget.mapkey][widget.secondmapKey]
+                    [widget.thirdmapKey]);
               });
             } else {
-              setState(() {
+              if (element[widget.mapkey][widget.secondmapKey] != null) {
+                setState(() {
+                  listValue.add(element[widget.mapkey][widget.secondmapKey]);
+                });
+              }
+            }
+          } else {
+            setState(() {
                 listValue.add(element[widget.mapkey]);
               });
-            }
           }
         }
       } else {
